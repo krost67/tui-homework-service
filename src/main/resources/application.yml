@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: tui-homework-service
+
+springdoc:
+  api-docs:
+    path: ${HOMEWORK_API_DOCS_PATH:/api-docs}
+  swagger-ui:
+    path: ${HOMEWORK_SWAGGER_PATH:/swagger-ui.html}
+    enabled: ${HOMEWORK_SWAGGER_ENABLED:true}
+  show-actuator: true
+
+homework:
+  title: ${HOMEWORK_TITLE:TUI Homework}
+  description: ${HOMEWORK_DESCRIPTION:Backend Developer task}
+  connector:
+    connectTimeout: ${HOMEWORK_CONNECT_TIMEOUT:1000}
+    readTimeout: ${HOMEWORK_READ_TIMEOUT:3000}
+    github:
+      host: ${HOMEWORK_GITHUB_HOST:https://api.github.com}
+      repos-uri: ${HOMEWORK_GITHUB_REPOS:/users/{username}/repos}
+      branches-uri: ${HOMEWORK_GITHUB_BRANCHES:/repos/{username}/{repo}/branches}
