@@ -7,7 +7,8 @@ public enum ErrorType {
     SERVICE_UNAVAILABLE("service_unavailable"),
     MISSING_PARAMETER("missing_parameter"),
     NOT_ACCEPTABLE_MEDIA_TYPE("not_acceptable_media_type"),
-    NOT_ACCEPTABLE_RESOURCE("not_acceptable_resource"),
+    FORBIDDEN("forbidden_access"),
+    RATE_LIMIT("rate_limit"),
     NOT_FOUND("resource_not_found");
 
     private final String value;

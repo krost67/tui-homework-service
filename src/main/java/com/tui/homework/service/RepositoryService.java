@@ -1,7 +1,8 @@
 package com.tui.homework.service;
 
 import com.tui.homework.connector.IRepositoryConnector;
-import com.tui.homework.exception.ResourceNotAcceptableException;
+import com.tui.homework.exception.RateLimitException;
+import com.tui.homework.exception.ResourceNotAvailableException;
 import com.tui.homework.exception.ResourceNotFoundException;
 import com.tui.homework.model.Branch;
 import com.tui.homework.model.Repository;
@@ -48,8 +49,10 @@ public class RepositoryService implements IRepositoryService {
                 Throwable t = ex.getCause();
                 if (t instanceof ResourceNotFoundException) {
                     throw (ResourceNotFoundException) t;
-                } else if (t instanceof ResourceNotAcceptableException) {
-                    throw (ResourceNotAcceptableException) t;
+                } else if (t instanceof ResourceNotAvailableException) {
+                    throw (ResourceNotAvailableException) t;
+                } else if (t instanceof RateLimitException) {
+                    throw (RateLimitException) t;
                 } else {
                     throw new RuntimeException(ex);
                 }

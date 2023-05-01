@@ -6,11 +6,8 @@ import static com.tui.homework.connector.github.utils.GitHubParameters.USERNAME_
 import com.tui.homework.connector.IBranchConnector;
 import com.tui.homework.connector.github.configuration.GitHubConnectorProperties;
 import com.tui.homework.connector.github.model.GitHubBranch;
-import com.tui.homework.connector.github.model.GitHubRepository;
 import com.tui.homework.connector.github.service.mapper.IGitHubBranchMapper;
-import com.tui.homework.exception.ResourceNotFoundException;
 import com.tui.homework.model.Branch;
-import com.tui.homework.model.Repository;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

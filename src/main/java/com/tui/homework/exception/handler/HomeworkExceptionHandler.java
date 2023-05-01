@@ -1,13 +1,15 @@
 package com.tui.homework.exception.handler;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import com.tui.homework.exception.MissedParameterException;
-import com.tui.homework.exception.ResourceNotAcceptableException;
+import com.tui.homework.exception.RateLimitException;
+import com.tui.homework.exception.ResourceNotAvailableException;
 import com.tui.homework.exception.ResourceNotFoundException;
 import com.tui.homework.model.ErrorMessage;
 import com.tui.homework.model.ErrorType;
@@ -21,11 +23,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class HomeworkExceptionHandler {
 
-    private static final String UNEXPECTED_ERROR_MESSAGE = "An unexpected error occurred while processing your request. Please try again later or contact support if the problem persists.";
-    private static final String MISSING_PARAMETER_MESSAGE = "The [%s] parameter is required but was not provided.";
-    private static final String RESOURCE_NOT_FOUND_MESSAGE = "The requested resource could not be found.";
-    private static final String NOT_ACCEPTABLE_MEDIA_MESSAGE = "The requested media type is not available.";
-    private static final String NOT_ACCEPTABLE_RESOURCE_MESSAGE = "The requested resource is not available.";
+    public static final String UNEXPECTED_ERROR_MESSAGE = "An unexpected error occurred while processing your request. Please try again later or "
+            + "contact support if the problem persists.";
+    public static final String MISSING_PARAMETER_MESSAGE = "The [%s] parameter is required but was not provided.";
+    public static final String RESOURCE_NOT_FOUND_MESSAGE = "The requested resource could not be found.";
+    public static final String NOT_ACCEPTABLE_MEDIA_MESSAGE = "The requested media type is not available.";
+    public static final String NOT_AVAILABLE_RESOURCE_MESSAGE = "The requested resource is not available.";
+    public static final String RATE_LIMIT_MESSAGE = "API rate limit exceeded";
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
     public ResponseEntity<?> handleNotAcceptableMediaTypeException(HttpMediaTypeNotAcceptableException ex) {
@@ -34,11 +38,18 @@ public class HomeworkExceptionHandler {
                 .body(new ErrorMessage(ErrorType.NOT_ACCEPTABLE_MEDIA_TYPE, NOT_ACCEPTABLE_MEDIA_MESSAGE));
     }
 
-    @ExceptionHandler(ResourceNotAcceptableException.class)
-    public ResponseEntity<?> handleNotAcceptableResourceException(ResourceNotAcceptableException ex) {
+    @ExceptionHandler(ResourceNotAvailableException.class)
+    public ResponseEntity<?> handleNotAvailableResourceException(ResourceNotAvailableException ex) {
         log.warn(ex.getMessage(), ex);
-        return ResponseEntity.status(NOT_ACCEPTABLE).contentType(APPLICATION_JSON)
-                .body(new ErrorMessage(ErrorType.NOT_ACCEPTABLE_RESOURCE, NOT_ACCEPTABLE_RESOURCE_MESSAGE));
+        return ResponseEntity.status(FORBIDDEN).contentType(APPLICATION_JSON)
+                .body(new ErrorMessage(ErrorType.FORBIDDEN, NOT_AVAILABLE_RESOURCE_MESSAGE));
+    }
+
+    @ExceptionHandler(RateLimitException.class)
+    public ResponseEntity<?> handleRateLimitException(RateLimitException ex) {
+        log.warn(ex.getMessage(), ex);
+        return ResponseEntity.status(FORBIDDEN).contentType(APPLICATION_JSON)
+                .body(new ErrorMessage(ErrorType.RATE_LIMIT, RATE_LIMIT_MESSAGE));
     }
 
     @ExceptionHandler(MissedParameterException.class)

@@ -1,0 +1,8 @@
+spring:
+  main:
+    banner-mode: 'OFF'
+
+homework:
+  connector:
+    github:
+      host: http://localhost:${wiremock.server.port}
